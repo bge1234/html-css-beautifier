@@ -1,12 +1,17 @@
 test-class {
   background: black ;
   color:white;
-  magin : 0 auto;
+  /*margin : 1 2 3 4;*/
+  /*margin  :  0 auto;*/
+  margin  :  0;
 }
 
 
-test-class-two{
+test-class-two
+{
   background:  black  ;
-  color:white; 
-  magin  :  0 auto;
+  color:white;
+  /*margin  :  1 2 3 4;*/
+  /*margin  :  0 auto;*/
+  margin  :  0;
 }

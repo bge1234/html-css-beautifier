@@ -5,3 +5,8 @@ This will lint HTML for the following things:
 - Consistent use of case on id and class names.
 
 This will lint CSS for correct spacing around the blocks and around the colons and semicolons.
+
+CSS todo:
+- Ignore comments.
+- Handle multiple padding and margin properties in one block.
+- Refactor by pulling out logic into separate funtions and passing in next token/set of tokens.
