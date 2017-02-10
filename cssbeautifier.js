@@ -3,16 +3,9 @@ function beautify () {
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(tokenizedFile))
 
   for (var i = 0; i < cleanedArray.length; i++) {
-    if (cleanedArray[i + 1] === '{') {
-      console.log(cleanedArray[i] + ' ' + cleanedArray[i + 1])
-      i++
-    } else if (cleanedArray[i] === '}') {
-      console.log(cleanedArray[i] + '\n')
-    } else {
-      var lineEnd = findLineEnd(cleanedArray, i)
-      printLine(cleanedArray, i, lineEnd)
-      i += (lineEnd - i)
-    }
+    var blockEnd = findBlockEnd(cleanedArray, i)
+    printBlock(cleanedArray, i, blockEnd, 0)
+    i += (blockEnd - i)
   }
 }
 
@@ -57,13 +50,45 @@ function removeComments (array) {
   return array
 }
 
+function findBlockEnd (array, blockStart) {
+  var blockEnd = 0
+
+  for (var j = blockStart; j < array.length; j++) {
+    if (array[j] === '}') {
+      blockEnd = j
+      j = array.length
+    }
+  }
+
+  return blockEnd
+}
+
+function printBlock (array, position, blockEnd, indent) {
+  console.log(array[position] + ' {')
+  position += 2
+
+  for (var i = position; i < blockEnd; i++) {
+    if (array[i + 1] === '{') {
+      var innerBlockEnd = findBlockEnd(array, i)
+      printBlock(array, i, innerBlockEnd)
+      i += (innerBlockEnd - i)
+    } else {
+      var lineEnd = findLineEnd(array, i)
+      printLine(array, i, lineEnd)
+      i += (lineEnd - i)
+    }
+  }
+
+  console.log('}\n')
+}
+
 function findLineEnd (array, lineStart) {
   var lineEnd = 0
 
   for (var j = lineStart; j < array.length; j++) {
     if (array[j][array[j].length - 1] === ';') {
       lineEnd = j
-      j = array.length // Force loop to end
+      j = array.length
     }
   }
 

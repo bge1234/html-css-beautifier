@@ -10,7 +10,7 @@
 }
 
 
-.test-class-two
+#test-id
 {
   background:  black  ;
   color:white;
@@ -19,8 +19,8 @@
   margin  :  0;
   /*padding: 1 2 3 4;*/
   /*padding: 1 2 3 4;*/
-  /*.another-class {
+  .another-class {
     color: black;
     background: white;
-  }*/
+  }
 }

@@ -1,6 +1,5 @@
-CSS todo:
-- Refactor by pulling out logic into separate functions and passing in next token/set of tokens.
-- Handle nested blocks (like SASS)
+CSS beautifer todo:
+- Handle nested blocks (like SASS). Use indent argument to space them within printBlock().
 
 The HTML beautifier does the following things:
 - Correct indentation.
