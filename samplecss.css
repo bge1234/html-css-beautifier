@@ -1,17 +1,26 @@
-test-class {
+.test-class {
   background: black ;
   color:white;
-  /*margin : 1 2 3 4;*/
-  /*margin  :  0 auto;*/
-  margin  :  0;
+  margin : 1 2 3 4;
+  margin  :  0 auto;
+  /*margin  :  0;
+  margin-top  :  0;*/
+  padding: 1 2 3 4
+  ;
 }
 
 
-test-class-two
+.test-class-two
 {
   background:  black  ;
   color:white;
-  /*margin  :  1 2 3 4;*/
-  /*margin  :  0 auto;*/
+  margin  :  1 2 3 4;
+  margin  :  0 auto;
   margin  :  0;
+  /*padding: 1 2 3 4;*/
+  /*padding: 1 2 3 4;*/
+  /*.another-class {
+    color: black;
+    background: white;
+  }*/
 }
