@@ -1,0 +1,20 @@
+.outer-class {
+  color: white;
+  .inner-class {
+    background: black;
+    .first-inner-class {
+      display: inline-block;
+      .next-inner-class {
+        color: white;
+        .additional-inner-class {
+          color: white;
+        }
+      }
+    }
+    .second-inner-class {
+      display: inline-block;
+    }
+    color: red;
+  }
+  background: blue;
+}

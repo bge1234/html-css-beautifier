@@ -1,17 +1,35 @@
 function beautify () {
-  var tokenizedFile = readTheFile('samplecss.css')
+  var tokenizedFile = readTheFile('samplesass.scss')
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(tokenizedFile))
 
-  for (var i = 0; i < cleanedArray.length; i++) {
-    var blockEnd = findBlockEnd(cleanedArray, i)
-    printBlock(cleanedArray, i, blockEnd, 0)
-    i += (blockEnd - i)
-  }
+  parse(cleanedArray)
 }
 
 function readTheFile (filename) {
   var fs = require('fs')
   return fs.readFileSync(filename, 'utf8').split(/[\s\n:]+/)
+}
+
+function parse (array) {
+  var indent = 0
+
+  for (var i = 0; i < array.length; i++) {
+    if (array[i + 1] === '{') {
+      console.log(getIndentation(indent) + array[i] + ' {')
+      indent += 2
+      i++
+    } else if (array[i + 1] === '}') {
+      console.log(getIndentation(indent) + '}')
+      indent -= 2
+      i++
+    } else {
+      console.log(getIndentation(indent) + '  the property is ', array[i])
+      i++
+
+      // console.log(getIndentation(indent) + '  ' + array[i] + ': ' + array[i + 1])
+      // i += 2
+    }
+  }
 }
 
 function removeLoneSemicolonsAndBlanks (array) {
@@ -64,22 +82,26 @@ function findBlockEnd (array, blockStart) {
 }
 
 function printBlock (array, position, blockEnd, indent) {
-  console.log(array[position] + ' {')
-  position += 2
+  var indentation = getIndentation(indent)
 
-  for (var i = position; i < blockEnd; i++) {
-    if (array[i + 1] === '{') {
-      var innerBlockEnd = findBlockEnd(array, i)
-      printBlock(array, i, innerBlockEnd)
-      i += (innerBlockEnd - i)
-    } else {
-      var lineEnd = findLineEnd(array, i)
-      printLine(array, i, lineEnd)
-      i += (lineEnd - i)
+  if (array[position] !== '}') {
+    console.log(indentation + array[position] + ' {')
+    position += 2
+
+    for (var i = position; i < blockEnd; i++) {
+      if (array[i + 1] === '{') {
+        var innerBlockEnd = findBlockEnd(array, i)
+        printBlock(array, i, innerBlockEnd, (indent + 2))
+        i += (innerBlockEnd - i)
+      } else {
+        var lineEnd = findLineEnd(array, i)
+        printLine(array, i, lineEnd, (indent + 2))
+        i += (lineEnd - i)
+      }
     }
-  }
 
-  console.log('}\n')
+    console.log(indentation + '}')
+  }
 }
 
 function findLineEnd (array, lineStart) {
@@ -95,8 +117,9 @@ function findLineEnd (array, lineStart) {
   return lineEnd
 }
 
-function printLine (array, lineStart, lineEnd) {
-  var lineOutput = '  ' + array[lineStart] + ':'
+function printLine (array, lineStart, lineEnd, indent) {
+  var indentation = getIndentation(indent)
+  var lineOutput = indentation + array[lineStart] + ':'
 
   for (var i = lineStart + 1; i <= lineEnd; i++) {
     lineOutput += ' '
@@ -104,6 +127,16 @@ function printLine (array, lineStart, lineEnd) {
   }
 
   console.log(lineOutput)
+}
+
+function getIndentation (indent) {
+  var indentation = ''
+
+  for (var i = 0; i < indent; i++) {
+    indentation += ' '
+  }
+
+  return indentation
 }
 
 beautify()

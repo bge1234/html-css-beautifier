@@ -1,5 +1,7 @@
-CSS beautifer todo:
-- Handle nested blocks (like SASS). Use indent argument to space them within printBlock().
+CSS todo:
+- Get it working for multiple levels of nested blocks.
+- Output to separate file instead of console.logging everything.
+- Take command line arguments.
 
 The HTML beautifier does the following things:
 - Correct indentation.
