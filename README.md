@@ -1,5 +1,6 @@
 CSS todo:
 - Get it working for multiple levels of nested blocks.
+- Switch all cases to be consistent (user-defined).
 - Output to separate file instead of console.logging everything.
 - Take command line arguments.
 
