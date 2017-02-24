@@ -1,6 +1,7 @@
 CSS todo:
-- Ignore single-line comments.
-- Switch all cases to be consistent (user-defined).
+- Margin and padding properties with only one value don't work right.
+- Put blank lines between blocks that are not nested.
+- Check that all cases of IDs and classes are consistent.
 - Output to separate file instead of console.logging everything.
 - Take command line arguments.
 

@@ -2,19 +2,46 @@
   color: white;
   .inner-class {
     background: black;
+    // color: red;
     .first-inner-class {
       display: inline-block;
       .next-inner-class {
         color: white;
         .additional-inner-class {
           color: white;
+          /* background: green; */
         }
       }
     }
     .second-inner-class {
       display: inline-block;
+      padding : 1
+      2 3 4;
+      margin  :  0 auto;
     }
     color: red;
   }
   background: blue;
+}
+
+.test-class {
+  background: black ;
+  color:white;
+  margin : 1 2 3 4;
+  margin  :  0 auto;
+  /*margin  :  0;
+  margin-top  :  0;*/
+  padding: 1 2 3 4
+  ;
+}
+#test-id
+{
+  background:  black  ;
+  color:white;
+  margin  :  1 2 3 4;
+  margin  :  0 auto;
+  margin  :  0;
+  /*padding: 1 2 3 4;*/
+  /*padding: 1 2 3 4;*/
+  display: block;
 }

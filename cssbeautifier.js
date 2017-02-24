@@ -2,15 +2,12 @@ function beautify () {
   var tokenizedFile = readTheFile('samplesass.scss')
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(tokenizedFile))
 
-  // for (var i = 0; i < cleanedArray.length; i++) {
-  //   console.log(cleanedArray[i] + ' (' + i + ')')
-  // }
-  // console.log('==========')
-
-  if (cleanedArray[1][0] !== '{') {
+  if (cleanedArray[1] !== '{') {
     console.log('not valid CSS/SASS')
   } else {
     var indent = 0
+
+    console.log('NOTE: Single line (//) comments are not removed, just the slashes are. Multi-line comments are removed entirely.\n')
 
     console.log(getIndentation(indent) + cleanedArray[0] + ' ' + cleanedArray[0 + 1])
     for (var i = 2; i < cleanedArray.length; i++) {
@@ -20,7 +17,17 @@ function beautify () {
         }
 
         if (cleanedArray[i + 1] !== '{') {
-          console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+          if (cleanedArray[i] === 'margin' || cleanedArray[i] === 'padding') {
+            if (cleanedArray[i + 3] !== '0' && cleanedArray[i + 3] !== '1' && cleanedArray[i + 3] !== '2' && cleanedArray[i + 3] !== '3' && cleanedArray[i + 3] !== '4' && cleanedArray[i + 3] !== '5' && cleanedArray[i + 3] !== '6' && cleanedArray[i + 3] !== '7' && cleanedArray[i + 3] !== '8' && cleanedArray[i + 3] !== '9' && cleanedArray[i + 3] !== 'auto') {
+              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2])
+              i++
+            } else {
+              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2] + ' ' + cleanedArray[i + 3] + ' ' + cleanedArray[i + 4])
+              i += 3
+            }
+          } else {
+            console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+          }
         } else {
           console.log(getIndentation(indent) + cleanedArray[i] + ' ' + cleanedArray[i + 1])
         }
@@ -68,6 +75,13 @@ function removeComments (array) {
 
       array.splice(commentStart, (commentEnd - commentStart + 1))
       i = commentEnd - commentStart + 1
+    }
+  }
+
+  for (i = 0; i < array.length; i++) {
+    if (array[i][0] === '/' && array[i][1] === '/') {
+      array.splice(i, 1)
+      i--
     }
   }
 
