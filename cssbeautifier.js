@@ -2,34 +2,40 @@ function beautify () {
   var tokenizedFile = readTheFile('samplesass.scss')
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(tokenizedFile))
 
-  parse(cleanedArray)
+  // for (var i = 0; i < cleanedArray.length; i++) {
+  //   console.log(cleanedArray[i] + ' (' + i + ')')
+  // }
+  // console.log('==========')
+
+  if (cleanedArray[1][0] !== '{') {
+    console.log('not valid CSS/SASS')
+  } else {
+    var indent = 0
+
+    console.log(getIndentation(indent) + cleanedArray[0] + ' ' + cleanedArray[0 + 1])
+    for (var i = 2; i < cleanedArray.length; i++) {
+      if (cleanedArray[i] !== '}') {
+        if (cleanedArray[i - 1] !== '}' && cleanedArray[i - 1][cleanedArray[i - 1].length - 1] !== ';') {
+          indent += 2
+        }
+
+        if (cleanedArray[i + 1] !== '{') {
+          console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+        } else {
+          console.log(getIndentation(indent) + cleanedArray[i] + ' ' + cleanedArray[i + 1])
+        }
+        i++
+      } else {
+        indent -= 2
+        console.log(getIndentation(indent) + '}')
+      }
+    }
+  }
 }
 
 function readTheFile (filename) {
   var fs = require('fs')
   return fs.readFileSync(filename, 'utf8').split(/[\s\n:]+/)
-}
-
-function parse (array) {
-  var indent = 0
-
-  for (var i = 0; i < array.length; i++) {
-    if (array[i + 1] === '{') {
-      console.log(getIndentation(indent) + array[i] + ' {')
-      indent += 2
-      i++
-    } else if (array[i + 1] === '}') {
-      console.log(getIndentation(indent) + '}')
-      indent -= 2
-      i++
-    } else {
-      console.log(getIndentation(indent) + '  the property is ', array[i])
-      i++
-
-      // console.log(getIndentation(indent) + '  ' + array[i] + ': ' + array[i + 1])
-      // i += 2
-    }
-  }
 }
 
 function removeLoneSemicolonsAndBlanks (array) {
@@ -66,67 +72,6 @@ function removeComments (array) {
   }
 
   return array
-}
-
-function findBlockEnd (array, blockStart) {
-  var blockEnd = 0
-
-  for (var j = blockStart; j < array.length; j++) {
-    if (array[j] === '}') {
-      blockEnd = j
-      j = array.length
-    }
-  }
-
-  return blockEnd
-}
-
-function printBlock (array, position, blockEnd, indent) {
-  var indentation = getIndentation(indent)
-
-  if (array[position] !== '}') {
-    console.log(indentation + array[position] + ' {')
-    position += 2
-
-    for (var i = position; i < blockEnd; i++) {
-      if (array[i + 1] === '{') {
-        var innerBlockEnd = findBlockEnd(array, i)
-        printBlock(array, i, innerBlockEnd, (indent + 2))
-        i += (innerBlockEnd - i)
-      } else {
-        var lineEnd = findLineEnd(array, i)
-        printLine(array, i, lineEnd, (indent + 2))
-        i += (lineEnd - i)
-      }
-    }
-
-    console.log(indentation + '}')
-  }
-}
-
-function findLineEnd (array, lineStart) {
-  var lineEnd = 0
-
-  for (var j = lineStart; j < array.length; j++) {
-    if (array[j][array[j].length - 1] === ';') {
-      lineEnd = j
-      j = array.length
-    }
-  }
-
-  return lineEnd
-}
-
-function printLine (array, lineStart, lineEnd, indent) {
-  var indentation = getIndentation(indent)
-  var lineOutput = indentation + array[lineStart] + ':'
-
-  for (var i = lineStart + 1; i <= lineEnd; i++) {
-    lineOutput += ' '
-    lineOutput += array[i]
-  }
-
-  console.log(lineOutput)
 }
 
 function getIndentation (indent) {
