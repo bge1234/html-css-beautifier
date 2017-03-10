@@ -18,7 +18,9 @@ function beautify () {
 
         if (cleanedArray[i + 1] !== '{') {
           if (cleanedArray[i] === 'margin' || cleanedArray[i] === 'padding') {
-            if (cleanedArray[i + 3] !== '0' && cleanedArray[i + 3] !== '1' && cleanedArray[i + 3] !== '2' && cleanedArray[i + 3] !== '3' && cleanedArray[i + 3] !== '4' && cleanedArray[i + 3] !== '5' && cleanedArray[i + 3] !== '6' && cleanedArray[i + 3] !== '7' && cleanedArray[i + 3] !== '8' && cleanedArray[i + 3] !== '9' && cleanedArray[i + 3] !== 'auto') {
+            if (cleanedArray[i + 2][0] !== '0' && cleanedArray[i + 2][0] !== '1' && cleanedArray[i + 2][0] !== '2' && cleanedArray[i + 2][0] !== '3' && cleanedArray[i + 2][0] !== '4' && cleanedArray[i + 2][0] !== '5' && cleanedArray[i + 2][0] !== '6' && cleanedArray[i + 2][0] !== '7' && cleanedArray[i + 2][0] !== '8' && cleanedArray[i + 2][0] !== '9' && cleanedArray[i + 2][0] !== 'a') {
+              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+            } else if (cleanedArray[i + 3][0] !== '0' && cleanedArray[i + 3][0] !== '1' && cleanedArray[i + 3][0] !== '2' && cleanedArray[i + 3][0] !== '3' && cleanedArray[i + 3][0] !== '4' && cleanedArray[i + 3][0] !== '5' && cleanedArray[i + 3][0] !== '6' && cleanedArray[i + 3][0] !== '7' && cleanedArray[i + 3][0] !== '8' && cleanedArray[i + 3][0] !== '9' && cleanedArray[i + 3][0] !== 'a') {
               console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2])
               i++
             } else {
