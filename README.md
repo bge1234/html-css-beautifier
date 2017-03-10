@@ -1,5 +1,8 @@
+CSS todo:
+- It should still work if things are on the same line with no spaces.
+
 The HTML beautifier does the following things:
-- Correct indentation.
+- Correct indentation/spacing.
 - Remove empty lines.
 - Change all quotes to single or double as defined by user (but not both).
 - Change IDs and classes to a single user-defined case.
