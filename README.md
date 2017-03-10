@@ -1,6 +1,4 @@
 CSS todo:
-- Handle pseudo operators with colons in the property.
-- Handle child selector with spaces (line 29 of sample SASS).
 - Check that all cases of IDs and classes are consistent.
 - Output to separate file instead of console.logging everything.
 - Take command line arguments.

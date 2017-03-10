@@ -24,9 +24,9 @@
   background: blue;
 }
 
-a {
+a > i {
   &.background: $black ;
-  &>color:white;
+  color:white;
   margin : 1 2 3 4;
   margin  :  0 auto;
   /*margin  :  0;
