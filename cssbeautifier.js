@@ -1,15 +1,16 @@
-function beautify () {
-  var tokenizedFile = readTheFile('samplesass.scss')
+function beautify (inputfile, outputfile) {
+  var tokenizedFile = readFile('samplesass.scss')
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(fixPseudoClasses(findChildSelectors(tokenizedFile))))
 
   if (cleanedArray[1] !== '{') {
-    console.log('not valid CSS/SASS')
+    console.log('Input file is not valid CSS/SASS')
   } else {
+    clearFile(outputfile)
     var indent = 0
 
     console.log('NOTE: Only the slashes on single-line (//) comments are removed. Multi-line comments are removed entirely.\n')
 
-    console.log(getIndentation(indent) + cleanedArray[0] + ' ' + cleanedArray[0 + 1])
+    writeToFile(outputfile, getIndentation(indent) + cleanedArray[0] + ' ' + cleanedArray[0 + 1] + '\n')
     for (var i = 2; i < cleanedArray.length; i++) {
       if (cleanedArray[i] !== '}') {
         if (cleanedArray[i - 1] !== '}' && cleanedArray[i - 1][cleanedArray[i - 1].length - 1] !== ';') {
@@ -19,26 +20,26 @@ function beautify () {
         if (cleanedArray[i + 1] !== '{') {
           if (cleanedArray[i] === 'margin' || cleanedArray[i] === 'padding') {
             if (cleanedArray[i + 2][0] !== '0' && cleanedArray[i + 2][0] !== '1' && cleanedArray[i + 2][0] !== '2' && cleanedArray[i + 2][0] !== '3' && cleanedArray[i + 2][0] !== '4' && cleanedArray[i + 2][0] !== '5' && cleanedArray[i + 2][0] !== '6' && cleanedArray[i + 2][0] !== '7' && cleanedArray[i + 2][0] !== '8' && cleanedArray[i + 2][0] !== '9' && cleanedArray[i + 2][0] !== 'a') {
-              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+              writeToFile(outputfile, getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + '\n')
             } else if (cleanedArray[i + 3][0] !== '0' && cleanedArray[i + 3][0] !== '1' && cleanedArray[i + 3][0] !== '2' && cleanedArray[i + 3][0] !== '3' && cleanedArray[i + 3][0] !== '4' && cleanedArray[i + 3][0] !== '5' && cleanedArray[i + 3][0] !== '6' && cleanedArray[i + 3][0] !== '7' && cleanedArray[i + 3][0] !== '8' && cleanedArray[i + 3][0] !== '9' && cleanedArray[i + 3][0] !== 'a') {
-              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2])
+              writeToFile(outputfile, getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2] + '\n')
               i++
             } else {
-              console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2] + ' ' + cleanedArray[i + 3] + ' ' + cleanedArray[i + 4])
+              writeToFile(outputfile, getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + ' ' + cleanedArray[i + 2] + ' ' + cleanedArray[i + 3] + ' ' + cleanedArray[i + 4] + '\n')
               i += 3
             }
           } else {
-            console.log(getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1])
+            writeToFile(outputfile, getIndentation(indent) + cleanedArray[i] + ': ' + cleanedArray[i + 1] + '\n')
           }
         } else {
-          console.log(getIndentation(indent) + cleanedArray[i] + ' ' + cleanedArray[i + 1])
+          writeToFile(outputfile, getIndentation(indent) + cleanedArray[i] + ' ' + cleanedArray[i + 1] + '\n')
         }
         i++
       } else {
         indent -= 2
-        console.log(getIndentation(indent) + '}')
+        writeToFile(outputfile, getIndentation(indent) + '}\n')
         if (cleanedArray[i + 1] !== '}') {
-          console.log(' ')
+          writeToFile(outputfile, '\n')
         }
       }
     }
@@ -47,9 +48,21 @@ function beautify () {
   checkCase(cleanedArray)
 }
 
-function readTheFile (filename) {
+function readFile (filepath) {
   var fs = require('fs')
-  return fs.readFileSync(filename, 'utf8').split(/[\s\n:]+/)
+  return fs.readFileSync(filepath, 'utf8').split(/[\s\n:]+/)
+}
+
+function writeToFile (filepath, contents) {
+  var fs = require('fs')
+  fs.appendFileSync(filepath, contents, function (err) {
+    if (err) return console.log(err)
+  })
+}
+
+function clearFile (filepath) {
+  var fs = require('fs')
+  fs.writeFileSync(filepath, '')
 }
 
 function removeLoneSemicolonsAndBlanks (array) {
@@ -172,4 +185,4 @@ function checkCase (array) {
   }
 }
 
-beautify()
+beautify('samplesass.scss', 'output.scss')

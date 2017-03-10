@@ -1,5 +1,4 @@
 CSS todo:
-- Output to separate file instead of console.logging everything.
 - Take command line arguments.
 
 The HTML beautifier does the following things:
