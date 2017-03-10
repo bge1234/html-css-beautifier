@@ -7,7 +7,7 @@ function beautify () {
   } else {
     var indent = 0
 
-    console.log('NOTE: Single line (//) comments are not removed, just the slashes are. Multi-line comments are removed entirely.\n')
+    console.log('NOTE: Only the slashes on single-line (//) comments are removed. Multi-line comments are removed entirely.\n')
 
     console.log(getIndentation(indent) + cleanedArray[0] + ' ' + cleanedArray[0 + 1])
     for (var i = 2; i < cleanedArray.length; i++) {
