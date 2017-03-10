@@ -1,6 +1,6 @@
 function beautify () {
   var tokenizedFile = readTheFile('samplesass.scss')
-  var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(tokenizedFile))
+  var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(fixPseudoClasses(tokenizedFile)))
 
   if (cleanedArray[1] !== '{') {
     console.log('not valid CSS/SASS')
@@ -91,6 +91,21 @@ function removeComments (array) {
   }
 
   return array
+}
+
+function fixPseudoClasses (array) {
+  var newArray = []
+
+  for (var i = 0; i < array.length - 1; i++) {
+    if (array[i + 1] === 'active' || array[i + 1] === 'any' || array[i + 1] === 'checked' || array[i + 1] === 'default' || (array[i + 1][0] === 'd' && array[i + 1][1] === 'i' && array[i + 1][2] === 'r') || array[i + 1] === 'disabled' || array[i + 1] === 'empty' || array[i + 1] === 'enabled' || array[i + 1] === 'first' || array[i + 1] === 'first-child' || array[i + 1] === 'first-of-type' || array[i + 1] === 'fullscreen' || array[i + 1] === 'focus' || array[i + 1] === 'hover' || array[i + 1] === 'indeterminate' || array[i + 1] === 'in-range' || array[i + 1] === 'invalid' || (array[i + 1][0] === 'l' && array[i + 1][1] === 'a' && array[i + 1][2] === 'n' && array[i + 1][3] === 'g') || array[i + 1] === 'last-child' || array[i + 1] === 'last-of-type' || array[i + 1] === 'left' || array[i + 1] === 'link' || (array[i + 1][0] === 'n' && array[i + 1][1] === 'o' && array[i + 1][2] === 't') || (array[i + 1][0] === 'n' && array[i + 1][1] === 't' && array[i + 1][2] === 'h') || array[i + 1] === 'only-child' || array[i + 1] === 'only-of-type' || array[i + 1] === 'optional' || array[i + 1] === 'out-of-range' || array[i + 1] === 'read-only' || array[i + 1] === 'read-write' || array[i + 1] === 'required' || array[i + 1] === 'right' || array[i + 1] === 'root' || array[i + 1] === 'scope' || array[i + 1] === 'target' || array[i + 1] === 'valid' || array[i + 1] === 'visited') {
+      newArray.push(array[i] + ':' + array[i + 1])
+      i++
+    } else {
+      newArray.push(array[i])
+    }
+  }
+
+  return newArray
 }
 
 function getIndentation (indent) {
