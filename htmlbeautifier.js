@@ -1,37 +1,70 @@
 function beautify (argValues) {
   var inputfile = argValues[2]
-  // var outputfile = argValues[3]
+  var outputfile = argValues[3]
 
   var tokenizedFile = readFile(inputfile)
-  var cleanedArray = removeExtraSpaces(removeComments(tokenizedFile))
-  console.log(cleanedArray)
+  var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile)))
+  var reversedArray = reverseArray(cleanedArray)
+  console.log(reversedArray)
+
+  clearFile(outputfile)
+  var indent = 0
+
+  parseBlock(0, reversedArray.length, reversedArray, indent, outputfile)
+}
+
+function parseBlock (start, end, array, indent, outputfile) {
+  for (var i = start; i < end; i++) {
+    console.log('i: ' + i)
+    if (array[i][1] === '/') {
+      var endTag = ''
+      for (var j = 2; j < array[i].length; j++) {
+        endTag += array[i][j]
+      }
+
+      for (j = i + 1; j < end; j++) {
+        console.log('j: ' + j)
+        if (array[j].includes(endTag)) {
+          writeToFile(outputfile, getIndentation(indent) + '<' + endTag + '\n')
+          indent += 2
+
+          console.log('parseBlock from ' + i + ' to ' + j)
+          parseBlock(i, j, array, indent, outputfile)
+
+          indent -= 2
+          writeToFile(outputfile, getIndentation(indent) + array[i] + '\n')
+          i = end
+        }
+      }
+    }
+  }
 }
 
 function readFile (filepath) {
   var fs = require('fs')
-  return fs.readFileSync(filepath, 'utf8').split(/[<>\t\n]+/)
+  return fs.readFileSync(filepath, 'utf8').split(/[\n]+/)
 }
 
-// function writeToFile (filepath, contents) {
-//   var fs = require('fs')
-//   fs.appendFileSync(filepath, contents, function (err) {
-//     if (err) return console.log(err)
-//   })
-// }
-//
-// function clearFile (filepath) {
-//   var fs = require('fs')
-//   fs.writeFileSync(filepath, '')
-// }
+function writeToFile (filepath, contents) {
+  var fs = require('fs')
+  fs.appendFileSync(filepath, contents, function (err) {
+    if (err) return console.log(err)
+  })
+}
+
+function clearFile (filepath) {
+  var fs = require('fs')
+  fs.writeFileSync(filepath, '')
+}
 
 function removeComments (array) {
   for (var i = 0; i < array.length; i++) {
-    if (array[i][0] === '!' && array[i][1] === '-' && array[i][2] === '-') {
+    if (array[i][0] === '<' && array[i][1] === '!' && array[i][2] === '-' && array[i][3] === '-') {
       var commentEnd = 0
       var commentStart = i
 
       for (var j = i; j < array.length; j++) {
-        if (array[j][array[j].length - 2] === '-' && array[j][array[j].length - 1] === '-') {
+        if (array[j][array[j].length - 3] === '-' && array[j][array[j].length - 2] === '-' && array[j][array[j].length - 1] === '>') {
           commentEnd = j
           j = array.length
         }
@@ -49,22 +82,63 @@ function removeExtraSpaces (array) {
   var newArray = []
 
   for (var i = 0; i < array.length; i++) {
-    if (array[i] !== '' && array[i][0] !== ' ' && array[i][1] !== ' ') {
-      var newToken = ''
+    var newToken = ''
 
-      for (var j = 0; j < array[i].length; j++) {
-        if (array[i][j] === ' ' && array[i][j + 1] === ' ') {
-          j++
-        } else {
-          newToken += array[i][j]
-        }
+    for (var j = 0; j < array[i].length; j++) {
+      if (array[i][j] === ' ' && array[i][j + 1] === ' ') {
+        j++
+      } else {
+        newToken += array[i][j]
       }
+    }
 
+    if (newToken !== '') {
       newArray.push(newToken)
     }
   }
 
   return newArray
+}
+
+function separateLines (array) {
+  var longString = ''
+  var newArray = []
+
+  for (var i = 0; i < array.length; i++) {
+    longString += array[i]
+  }
+
+  var newToken = ''
+
+  for (i = 0; i < longString.length; i++) {
+    newToken += longString[i]
+    if (longString[i] === '>' || longString[i + 1] === '<') {
+      newArray.push(newToken)
+      newToken = ''
+    }
+  }
+
+  return newArray
+}
+
+function reverseArray (array) {
+  var newArray = []
+
+  for (var i = array.length - 1; i >= 0; i--) {
+    newArray.push(array[i])
+  }
+
+  return newArray
+}
+
+function getIndentation (indent) {
+  var indentation = ''
+
+  for (var i = 0; i < indent; i++) {
+    indentation += ' '
+  }
+
+  return indentation
 }
 
 beautify(process.argv)
