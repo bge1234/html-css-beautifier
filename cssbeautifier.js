@@ -1,5 +1,8 @@
-function beautify (inputfile, outputfile) {
-  var tokenizedFile = readFile('samplesass.scss')
+function beautify (argValues) {
+  var inputfile = argValues[2]
+  var outputfile = argValues[3]
+
+  var tokenizedFile = readFile(inputfile)
   var cleanedArray = removeLoneSemicolonsAndBlanks(removeComments(fixPseudoClasses(findChildSelectors(tokenizedFile))))
 
   if (cleanedArray[1] !== '{') {
@@ -169,7 +172,7 @@ function checkCase (array) {
   for (i = 1; i < classArray.length; i++) {
     if ((classArray[i].indexOf('-') >= 0 && classCase === 'camel') || (classArray[i].indexOf('-') === -1 && classCase === 'dash')) {
       i = classArray.length
-      console.log('Classes are not the same case (camel case vs. dashed)')
+      console.log('WARNING: Classes are not all in the same case (camel case vs. dashed)')
     }
   }
 
@@ -180,9 +183,9 @@ function checkCase (array) {
   for (i = 1; i < idArray.length; i++) {
     if ((idArray[i].indexOf('-') >= 0 && idCase === 'camel') || (idArray[i].indexOf('-') === -1 && idCase === 'dash')) {
       i = idArray.length
-      console.log('IDs are not the same case (camel case vs. dashed)')
+      console.log('WARNING: IDs are not all in the same case (camel case vs. dashed)')
     }
   }
 }
 
-beautify('samplesass.scss', 'output.scss')
+beautify(process.argv)

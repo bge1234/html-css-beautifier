@@ -1,5 +1,5 @@
 CSS todo:
-- Take command line arguments.
+- Replace inconsistent cases of classes and IDs.
 
 The HTML beautifier does the following things:
 - Correct indentation.
@@ -10,5 +10,5 @@ The HTML beautifier does the following things:
 The CSS beautifier corrects the spacing around the blocks and around the colons and semicolons.
 
 Joint todo:
-- Replace cases across all HTML and CSS files.
+- Replace inconsistent cases across HTML and CSS files.
 - Find dead CSS.
