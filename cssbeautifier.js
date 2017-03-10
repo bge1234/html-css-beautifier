@@ -43,6 +43,8 @@ function beautify () {
       }
     }
   }
+
+  checkCase(cleanedArray)
 }
 
 function readTheFile (filename) {
@@ -131,6 +133,43 @@ function getIndentation (indent) {
   }
 
   return indentation
+}
+
+function checkCase (array) {
+  var classArray = []
+  var idArray = []
+  var classCase = 'camel'
+  var idCase = 'camel'
+
+  for (var i = 0; i < array.length; i++) {
+    if (array[i][0] === '.') {
+      classArray.push(array[i])
+    } else if (array[i][0] === '#') {
+      idArray.push(array[i])
+    }
+  }
+
+  if (classArray[0].indexOf('-') >= 0) {
+    classCase = 'dash'
+  }
+
+  for (i = 1; i < classArray.length; i++) {
+    if ((classArray[i].indexOf('-') >= 0 && classCase === 'camel') || (classArray[i].indexOf('-') === -1 && classCase === 'dash')) {
+      i = classArray.length
+      console.log('Classes are not the same case (camel case vs. dashed)')
+    }
+  }
+
+  if (idArray[0].indexOf('-') >= 0) {
+    idCase = 'dash'
+  }
+
+  for (i = 1; i < idArray.length; i++) {
+    if ((idArray[i].indexOf('-') >= 0 && idCase === 'camel') || (idArray[i].indexOf('-') === -1 && idCase === 'dash')) {
+      i = idArray.length
+      console.log('IDs are not the same case (camel case vs. dashed)')
+    }
+  }
 }
 
 beautify()

@@ -1,5 +1,4 @@
 CSS todo:
-- Check that all cases of IDs and classes are consistent.
 - Output to separate file instead of console.logging everything.
 - Take command line arguments.
 
