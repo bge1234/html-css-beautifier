@@ -24,9 +24,9 @@
   background: blue;
 }
 
-.test-class {
-  background: black ;
-  color:white;
+a {
+  &.background: $black ;
+  &>color:white;
   margin : 1 2 3 4;
   margin  :  0 auto;
   /*margin  :  0;
@@ -37,7 +37,9 @@
 #test-id
 {
   background:  black  ;
-  color:white;
+  &:hover {
+    color:white;
+  }
   margin  :  1 2 3 4;
   margin  :  0 auto;
   margin  :  0;

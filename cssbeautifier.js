@@ -37,6 +37,9 @@ function beautify () {
       } else {
         indent -= 2
         console.log(getIndentation(indent) + '}')
+        if (cleanedArray[i + 1] !== '}') {
+          console.log(' ')
+        }
       }
     }
   }

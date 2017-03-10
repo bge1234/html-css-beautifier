@@ -1,6 +1,6 @@
 CSS todo:
-- Margin and padding properties with only one value don't work right.
-- Put blank lines between blocks that are not nested.
+- Handle pseudo operators with colons in the property.
+- Handle child selector with spaces (line 29 of sample SASS).
 - Check that all cases of IDs and classes are consistent.
 - Output to separate file instead of console.logging everything.
 - Take command line arguments.
