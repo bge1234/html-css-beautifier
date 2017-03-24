@@ -1,3 +1,5 @@
+# A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
+
 CSS todo:
 - It should still work if things are on the same line with no spaces.
 
