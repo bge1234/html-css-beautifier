@@ -1,10 +1,12 @@
 # A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
 
-CSS todo:
-- It should still work if things are on the same line with no spaces.
-
 HTML todo:
 - Handle `<!DOCTYPE html>` tag.
+- Include attributes with output elements.
+- Handle nested elements of the same type.
+
+CSS todo:
+- Should still work if things are on the same line with no spaces.
 
 Joint todo:
 - Replace inconsistent cases across HTML and CSS files.

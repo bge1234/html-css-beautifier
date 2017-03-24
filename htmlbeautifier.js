@@ -5,31 +5,43 @@ function beautify (argValues) {
   var tokenizedFile = readFile(inputfile)
   var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile)))
   var reversedArray = reverseArray(cleanedArray)
-  console.log(reversedArray)
+  // console.log(reversedArray)
 
   clearFile(outputfile)
   var indent = 0
 
-  parseBlock(0, reversedArray.length, reversedArray, indent, outputfile)
+  if (reversedArray[reversedArray.length - 1] === '<!DOCTYPE html>') {
+    writeToFile(outputfile, getIndentation(indent) + '<!DOCTYPE html>\n')
+    parseBlock(0, reversedArray.length - 1, reversedArray, indent, outputfile)
+  } else {
+    parseBlock(0, reversedArray.length, reversedArray, indent, outputfile)
+  }
 }
 
 function parseBlock (start, end, array, indent, outputfile) {
   for (var i = start; i < end; i++) {
-    console.log('i: ' + i)
+    // console.log('i: ' + i)
     if (array[i][1] === '/') {
+      // console.log(array[i] + 'block ends at ' + i)
       var endTag = ''
-      for (var j = 2; j < array[i].length; j++) {
+      for (var j = 2; j < array[i].length - 1; j++) {
         endTag += array[i][j]
       }
 
       for (j = i + 1; j < end; j++) {
-        console.log('j: ' + j)
+        // console.log('j: ' + j)
+        // console.log(array[j] + ' includes ' + endTag + '? ', array[j].includes(endTag));
         if (array[j].includes(endTag)) {
-          writeToFile(outputfile, getIndentation(indent) + '<' + endTag + '\n')
+          // console.log(array [j] + 'block begins at ' + j)
+          writeToFile(outputfile, getIndentation(indent) + '<' + endTag + '>\n')
           indent += 2
 
-          console.log('parseBlock from ' + i + ' to ' + j)
-          parseBlock(i, j, array, indent, outputfile)
+          // console.log('parse block from ' + i + ' to ' + j)
+          if (j - i === 2) {
+            writeToFile(outputfile, getIndentation(indent) + array[i + 1] + '\n')
+          } else {
+            parseBlock(i + 1, j, array, indent, outputfile)
+          }
 
           indent -= 2
           writeToFile(outputfile, getIndentation(indent) + array[i] + '\n')
