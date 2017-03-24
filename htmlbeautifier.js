@@ -3,9 +3,9 @@ function beautify (argValues) {
   var outputfile = argValues[3]
 
   var tokenizedFile = readFile(inputfile)
-  var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile)))
+  var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile, 0)))
   var reversedArray = reverseArray(cleanedArray)
-  // console.log(reversedArray)
+  console.log(reversedArray)
 
   clearFile(outputfile)
   var indent = 0
@@ -20,31 +20,40 @@ function beautify (argValues) {
 
 function parseBlock (start, end, array, indent, outputfile) {
   for (var i = start; i < end; i++) {
-    // console.log('i: ' + i)
+    console.log('i: ' + i)
     if (array[i][1] === '/') {
-      // console.log(array[i] + 'block ends at ' + i)
-      var endTag = ''
+      console.log(array[i] + ' block ends at ' + i)
+      var endTagName = ''
       for (var j = 2; j < array[i].length - 1; j++) {
-        endTag += array[i][j]
+        endTagName += array[i][j]
       }
 
       for (j = i + 1; j < end; j++) {
-        // console.log('j: ' + j)
-        // console.log(array[j] + ' includes ' + endTag + '? ', array[j].includes(endTag));
-        if (array[j].includes(endTag)) {
-          // console.log(array [j] + 'block begins at ' + j)
-          writeToFile(outputfile, getIndentation(indent) + '<' + endTag + '>\n')
+        console.log('j: ' + j)
+        console.log(array[j] + ' includes ' + endTagName + '? ', array[j].includes(endTagName));
+        if (array[j].includes(endTagName)) {
+          console.log(array[j] + ' block begins at ' + j)
+          var attributeStart = array[j].indexOf(endTagName) + endTagName.length
+          var attributeContents = ''
+          for (var k = attributeStart; k < array[j].length - 1; k++) {
+            attributeContents += array[j][k]
+          }
+
+          var startTag = '<' + endTagName + attributeContents + '>'
+          writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
           indent += 2
 
-          // console.log('parse block from ' + i + ' to ' + j)
+          console.log('parse block from ' + i + ' to ' + j)
           if (j - i === 2) {
-            writeToFile(outputfile, getIndentation(indent) + array[i + 1] + '\n')
+            var loneLine = array[i + 1]
+            writeToFile(outputfile, getIndentation(indent) + loneLine + '\n')
           } else {
             parseBlock(i + 1, j, array, indent, outputfile)
           }
 
+          var endTag = '</' + endTagName + '>'
           indent -= 2
-          writeToFile(outputfile, getIndentation(indent) + array[i] + '\n')
+          writeToFile(outputfile, getIndentation(indent) + endTag + '\n')
           i = end
         }
       }
@@ -69,8 +78,8 @@ function clearFile (filepath) {
   fs.writeFileSync(filepath, '')
 }
 
-function removeComments (array) {
-  for (var i = 0; i < array.length; i++) {
+function removeComments (array, start) {
+  for (var i = start; i < array.length; i++) {
     if (array[i][0] === '<' && array[i][1] === '!' && array[i][2] === '-' && array[i][3] === '-') {
       var commentEnd = 0
       var commentStart = i
@@ -78,6 +87,7 @@ function removeComments (array) {
       for (var j = i; j < array.length; j++) {
         if (array[j][array[j].length - 3] === '-' && array[j][array[j].length - 2] === '-' && array[j][array[j].length - 1] === '>') {
           commentEnd = j
+          removeComments(array, j)
           j = array.length
         }
       }

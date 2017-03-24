@@ -1,12 +1,15 @@
 # A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
 
 HTML todo:
-- Handle `<!DOCTYPE html>` tag.
-- Include attributes with output elements.
+- Handle multiple comment blocks.
 - Handle nested elements of the same type.
+- Try autocompleted HTML skeleton from Atom.
+- Try big samplehtml.html contents.
+- Extract stuff out of parseBlock() into helper functions.
 
 CSS todo:
 - Should still work if things are on the same line with no spaces.
+- Extract stuff out of main function into helper functions.
 
 Joint todo:
 - Replace inconsistent cases across HTML and CSS files.
