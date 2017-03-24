@@ -4,7 +4,7 @@ CSS todo:
 - It should still work if things are on the same line with no spaces.
 
 HTML todo:
-- Handle <!DOCTYPE html> tag.
+- Handle `<!DOCTYPE html>` tag.
 
 The HTML beautifier does the following things:
 - Correct indentation/spacing.
