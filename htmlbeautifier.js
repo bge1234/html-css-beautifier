@@ -4,54 +4,78 @@ function beautify (argValues) {
 
   var tokenizedFile = readFile(inputfile)
   var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile, 0)))
-  var reversedArray = reverseArray(cleanedArray)
 
   clearFile(outputfile)
-  var indent = 0
-
-  if (reversedArray[reversedArray.length - 1] === '<!DOCTYPE html>') {
-    writeToFile(outputfile, getIndentation(indent) + '<!DOCTYPE html>\n')
-    parseBlock(0, reversedArray.length - 1, reversedArray, indent, outputfile)
-  } else {
-    parseBlock(0, reversedArray.length, reversedArray, indent, outputfile)
-  }
+  parseArray(cleanedArray, outputfile)
 }
 
-function parseBlock (start, end, array, indent, outputfile) {
-  for (var i = start; i < end; i++) {
-    if (array[i][1] === '/') {
-      var endTagName = ''
-      for (var j = 2; j < array[i].length - 1; j++) {
-        endTagName += array[i][j]
+function parseArray (array, outputfile) {
+  var closeArray = []
+  var indent = 0
+
+  for (var i = 0; i < array.length; i++) {
+    var startTag = ''
+    var startTagNoAttrbute = ''
+    var attributeContents = ''
+    var endTagPos = -1
+    var possibleEndTag = '</'
+
+    if (array[i][1] !== '/') {
+      startTag = array[i]
+      attributeContents = getAttributeFromTag(startTag)
+      if (attributeContents === '') {
+        startTagNoAttrbute = startTag
+      } else {
+        for (var j = 0; j < startTag.indexOf(attributeContents) - 1; j++) {
+          startTagNoAttrbute += startTag[j]
+        }
+        startTagNoAttrbute += '>'
       }
 
-      for (j = i + 1; j < end; j++) {
-        if (array[j].includes(endTagName)) {
-          var attributeStart = array[j].indexOf(endTagName) + endTagName.length
-          var attributeContents = ''
-          for (var k = attributeStart; k < array[j].length - 1; k++) {
-            attributeContents += array[j][k]
-          }
+      for (j = 1; j < startTagNoAttrbute.length; j++) {
+        possibleEndTag += startTagNoAttrbute[j]
+      }
 
-          var startTag = '<' + endTagName + attributeContents + '>'
-          writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
-          indent += 2
+      writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
 
-          if (j - i === 2) {
-            var loneLine = array[i + 1]
-            writeToFile(outputfile, getIndentation(indent) + loneLine + '\n')
-          } else {
-            parseBlock(i + 1, j, array, indent, outputfile)
-          }
-
-          var endTag = '</' + endTagName + '>'
-          indent -= 2
-          writeToFile(outputfile, getIndentation(indent) + endTag + '\n')
-          i = end
-        }
+      endTagPos = findEndTagPos(array, possibleEndTag, i)
+      if (endTagPos > -1) {
+        indent += 2
+        closeArray.splice(0, 0, array[endTagPos])
+      } else {
       }
     }
   }
+
+  for (i = 0; i < closeArray.length; i++) {
+    indent -= 2
+    writeToFile(outputfile, getIndentation(indent) + closeArray[i] + '\n')
+  }
+}
+
+function getAttributeFromTag (tag) {
+  var split = tag.split(' ')
+  var attribute = ''
+
+  if ((split.length > 1) && (split[1].indexOf('=') !== -1)) {
+    for (var i = 0; i < split[1].length - 1; i++) {
+      attribute += split[1][i]
+    }
+
+    return attribute
+  } else {
+    return ''
+  }
+}
+
+function findEndTagPos (array, endTag, startTagPos) {
+  for (var i = startTagPos + 1; i < array.length; i++) {
+    if (array[i] === endTag) {
+      return i
+    }
+  }
+
+  return -1
 }
 
 function readFile (filepath) {
@@ -128,16 +152,6 @@ function separateLines (array) {
       newArray.push(newToken)
       newToken = ''
     }
-  }
-
-  return newArray
-}
-
-function reverseArray (array) {
-  var newArray = []
-
-  for (var i = array.length - 1; i >= 0; i--) {
-    newArray.push(array[i])
   }
 
   return newArray
