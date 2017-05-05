@@ -1,7 +1,6 @@
 # A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
 
 HTML todo:
-- Handle multiple comment blocks.
 - Handle nested elements of the same type.
 - Try autocompleted HTML skeleton from Atom.
 - Try big samplehtml.html contents.

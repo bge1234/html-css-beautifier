@@ -5,7 +5,6 @@ function beautify (argValues) {
   var tokenizedFile = readFile(inputfile)
   var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile, 0)))
   var reversedArray = reverseArray(cleanedArray)
-  console.log(reversedArray)
 
   clearFile(outputfile)
   var indent = 0
@@ -79,13 +78,12 @@ function removeComments (array, start) {
       for (var j = i; j < array.length; j++) {
         if (array[j][array[j].length - 3] === '-' && array[j][array[j].length - 2] === '-' && array[j][array[j].length - 1] === '>') {
           commentEnd = j
+          array.splice(commentStart, (commentEnd - commentStart + 1))
+          i = -1
           removeComments(array, j)
           j = array.length
         }
       }
-
-      array.splice(commentStart, (commentEnd - commentStart + 1))
-      i = commentEnd - commentStart + 1
     }
   }
 
