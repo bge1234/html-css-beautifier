@@ -1,10 +1,9 @@
 # A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
 
 HTML todo:
-- Handle nested elements of the same type.
-- Try autocompleted HTML skeleton from Atom.
-- Try big samplehtml.html contents.
 - Extract stuff out of parseBlock() into helper functions.
+- Handle autocompleted HTML skeleton from Atom.
+- Handle big samplehtml.html contents.
 
 CSS todo:
 - Should still work if things are on the same line with no spaces.
