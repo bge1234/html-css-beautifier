@@ -20,19 +20,14 @@ function beautify (argValues) {
 
 function parseBlock (start, end, array, indent, outputfile) {
   for (var i = start; i < end; i++) {
-    console.log('i: ' + i)
     if (array[i][1] === '/') {
-      console.log(array[i] + ' block ends at ' + i)
       var endTagName = ''
       for (var j = 2; j < array[i].length - 1; j++) {
         endTagName += array[i][j]
       }
 
       for (j = i + 1; j < end; j++) {
-        console.log('j: ' + j)
-        console.log(array[j] + ' includes ' + endTagName + '? ', array[j].includes(endTagName));
         if (array[j].includes(endTagName)) {
-          console.log(array[j] + ' block begins at ' + j)
           var attributeStart = array[j].indexOf(endTagName) + endTagName.length
           var attributeContents = ''
           for (var k = attributeStart; k < array[j].length - 1; k++) {
@@ -43,7 +38,6 @@ function parseBlock (start, end, array, indent, outputfile) {
           writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
           indent += 2
 
-          console.log('parse block from ' + i + ' to ' + j)
           if (j - i === 2) {
             var loneLine = array[i + 1]
             writeToFile(outputfile, getIndentation(indent) + loneLine + '\n')
@@ -68,9 +62,7 @@ function readFile (filepath) {
 
 function writeToFile (filepath, contents) {
   var fs = require('fs')
-  fs.appendFileSync(filepath, contents, function (err) {
-    if (err) return console.log(err)
-  })
+  fs.appendFileSync(filepath, contents)
 }
 
 function clearFile (filepath) {
