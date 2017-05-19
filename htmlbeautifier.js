@@ -22,6 +22,7 @@ function parseArray (array, outputfile) {
       startTag = array[i]
       var startTagNoAttrbute = getStartTagWithoutAttribute(startTag)
 
+      console.log('writing ', startTag)
       writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
 
       for (var j = 1; j < startTagNoAttrbute.length; j++) {
