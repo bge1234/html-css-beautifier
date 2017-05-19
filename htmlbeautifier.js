@@ -105,7 +105,7 @@ function clearFile (filepath) {
 
 function removeComments (array, start) {
   for (var i = start; i < array.length; i++) {
-    if (array[i][0] === '<' && array[i][1] === '!' && array[i][2] === '-' && array[i][3] === '-') {
+    if (array[i].indexOf('<!--') > -1) {
       var commentEnd = 0
       var commentStart = i
 
