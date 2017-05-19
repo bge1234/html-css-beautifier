@@ -3,7 +3,7 @@ function beautify (argValues) {
   var outputfile = argValues[3]
 
   var tokenizedFile = readFile(inputfile)
-  var cleanedArray = separateLines(removeExtraSpaces(removeComments(tokenizedFile, 0)))
+  var cleanedArray = cleanArray(tokenizedFile)
 
   clearFile(outputfile)
   parseArray(cleanedArray, outputfile)
@@ -15,41 +15,51 @@ function parseArray (array, outputfile) {
 
   for (var i = 0; i < array.length; i++) {
     var startTag = ''
-    var startTagNoAttrbute = ''
-    var attributeContents = ''
     var endTagPos = -1
     var possibleEndTag = '</'
 
     if (array[i][1] !== '/') {
       startTag = array[i]
-      attributeContents = getAttributeFromTag(startTag)
-      if (attributeContents === '') {
-        startTagNoAttrbute = startTag
-      } else {
-        for (var j = 0; j < startTag.indexOf(attributeContents) - 1; j++) {
-          startTagNoAttrbute += startTag[j]
-        }
-        startTagNoAttrbute += '>'
-      }
-
-      for (j = 1; j < startTagNoAttrbute.length; j++) {
-        possibleEndTag += startTagNoAttrbute[j]
-      }
+      var startTagNoAttrbute = getStartTagWithoutAttribute(startTag)
 
       writeToFile(outputfile, getIndentation(indent) + startTag + '\n')
+
+      for (var j = 1; j < startTagNoAttrbute.length; j++) {
+        possibleEndTag += startTagNoAttrbute[j]
+      }
 
       endTagPos = findEndTagPos(array, possibleEndTag, i)
       if (endTagPos > -1) {
         indent += 2
         closeArray.splice(0, 0, array[endTagPos])
-      } else {
       }
     }
   }
 
-  for (i = 0; i < closeArray.length; i++) {
+  writeClosingTags(closeArray, indent, outputfile)
+}
+
+function getStartTagWithoutAttribute (startTag) {
+  var attributeContents = getAttributeFromTag(startTag)
+
+  if (attributeContents === '') {
+    return startTag
+  } else {
+    var tag = ''
+
+    for (var j = 0; j < startTag.indexOf(attributeContents) - 1; j++) {
+      tag += startTag[j]
+    }
+    tag += '>'
+
+    return tag
+  }
+}
+
+function writeClosingTags (array, indent, outputfile) {
+  for (var i = 0; i < array.length; i++) {
     indent -= 2
-    writeToFile(outputfile, getIndentation(indent) + closeArray[i] + '\n')
+    writeToFile(outputfile, getIndentation(indent) + array[i] + '\n')
   }
 }
 
@@ -165,6 +175,16 @@ function getIndentation (indent) {
   }
 
   return indentation
+}
+
+function cleanArray (array) {
+  var output = []
+
+  output = removeComments(array, 0)
+  output = removeExtraSpaces(output)
+  output = separateLines(output)
+
+  return output
 }
 
 beautify(process.argv)

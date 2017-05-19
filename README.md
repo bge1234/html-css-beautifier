@@ -1,7 +1,6 @@
 # A CSS and HTML beautifier/linter built by developers at Allstate's CompoZed Labs
 
 HTML todo:
-- Extract stuff out of parseBlock() into helper functions.
 - Handle autocompleted HTML skeleton from Atom.
 - Handle big samplehtml.html contents.
 
